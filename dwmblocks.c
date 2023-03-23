@@ -55,11 +55,12 @@ static char statusbar[LENGTH(blocks)][CMDLENGTH] = {0};
 static char statusstr[2][STATUSLENGTH];
 static char button[] = "\0";
 static int statusContinue = 1;
-static int returnStatus = 0;
 
 //opens process *cmd and stores output in *output
 void getcmd(const Block *block, char *output)
 {
+	char *ret;
+
 	if (block->signal)
 	{
 		output[0] = block->signal;
@@ -81,7 +82,9 @@ void getcmd(const Block *block, char *output)
 	if (!cmdf)
 		return;
 	int i = strlen(block->icon);
-	fgets(output+i, CMDLENGTH-i-delimLen, cmdf);
+	ret = fgets(output+i, CMDLENGTH-i-delimLen, cmdf);
+	if (ret == NULL)
+		fprintf(stderr, "Failed to get string\n");
 	i = strlen(output);
 	if (i == 0) {
 		//return if block and command output are both empty
@@ -129,12 +132,10 @@ void setupsignals()
 	struct sigaction sa;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		if (blocks[i].signal > 0) {
-			signal(SIGMINUS+blocks[i].signal, sighandler);
-			sigaddset(&sa.sa_mask, SIGRTMIN+blocks[i].signal); // ignore signal when handling SIGUSR1
+			sa.sa_sigaction = buttonhandler;
+			sa.sa_flags = SA_SIGINFO;
+			sigaction(SIGRTMIN+blocks[i].signal, &sa, NULL);
 		}
-	sa.sa_sigaction = buttonhandler;
-	sa.sa_flags = SA_SIGINFO;
-	sigaction(SIGUSR1, &sa, NULL);
 	}
 
 }
@@ -203,8 +204,8 @@ void dummysighandler(int signum)
 
 void buttonhandler(int sig, siginfo_t *si, void *ucontext)
 {
-	*button = '0' + si->si_value.sival_int & 0xff;
-	getsigcmds(si->si_value.sival_int >> 8);
+	*button = '0' + (si->si_value.sival_int & 0xff);
+	getsigcmds(sig-SIGRTMIN);
 	writestatus();
 }
 #endif
