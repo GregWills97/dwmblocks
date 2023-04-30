@@ -28,6 +28,7 @@ clean:
 install: dwmblocks
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f dwmblocks ${DESTDIR}${PREFIX}/bin
+	cp -f modules/* ${DESTDIR}${PREFIX}/bin
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwmblocks
 
 uninstall:
