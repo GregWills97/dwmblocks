@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+[ -f /sys/class/power_supply/BAT0/capacity ] || exit
+
+case $BUTTON in
+	4) xbacklight -inc 5 ;;
+	5) xbacklight -dec 5 ;;
+esac
+
+# Get status for icon and capacity
+cap=$(cat /sys/class/power_supply/BAT0/capacity)
+charging=$(sed "/Discharging/ ! s/.*/ 🔌/ ; s/Discharging//" /sys/class/power_supply/BAT0/status)
+
+# From capacity, determine size of rectangle
+xmax="22"
+rectx=$(echo $xmax $cap | awk '{ print $1-int((18*$2)/100) }')
+rectlen=$(echo $xmax $rectx | awk '{ print $1-$2 }')
+
+# Calculate color of battery
+fcap=$(printf "%.0f" $cap);
+warned="${HOME}/.cache/batwarning"
+case 1 in
+	$((fcap <= 20)) ) 
+		if [ ! -f $warned ]; then 
+			notify-send "Low Battery"
+			xbacklight -set 40 
+			touch $warned
+		fi
+		color="#cd2718" #red
+		;;
+	$((fcap <= 40)) )
+		color="#ecc34d" #yellow
+		rm -f $warned
+		;;
+	*) 
+		[ -z $charging ] && color="#bbbbbb" || color="#58a51d" ##fg or green
+		rm -f $warned
+		;;
+esac
+
+rect="^r0,11,2,4^^r2,8,22,10^^c#000000^^r3,9,20,8^^c$color^^r$rectx,10,$rectlen,6^^d^^f24^"
+
+printf "%s %s %s\n" $charging $rect "$cap%" | sed 's/ $//'

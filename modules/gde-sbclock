@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+getday() {
+	dateicon="📅"
+	date=$(date +"%a, %b %d")
+	printf "%s %s\n" $dateicon "$date"
+}
+
+gettime() {
+	clocksyms=(🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕘 🕙 🕚 🕛)
+	currtime=$(date +"%l:%M%p")
+	fcurrtime=$(printf "%.0f" "${currtime//\:*/}")
+	printf "%s %s\n" "${clocksyms[$fcurrtime-1]}" "$currtime" | sed 's/  / /'
+}
+
+[ "$1" = "time" ] && gettime
+[ "$1" = "day" ] && getday

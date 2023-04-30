@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+case $BUTTON in
+	1) st -e nmtui; ;;
+esac
+
+wifiicon=$(sed "s/down//;s/up/📶 /" /sys/class/net/w*/operstate 2>/dev/null)
+vpnicon=$(sed "s/.*/[VPN] /" /sys/class/net/{tun*,home-vpn}/operstate 2>/dev/null)
+ethicon=$(sed "s/down//;s/up/🌐 /" /sys/class/net/e*/operstate 2>/dev/null)
+vpncol="#f9cb8c"
+
+#Neither connected
+if [ "$wifiicon" = "$ethicon" ] ; then
+	grep -xq '0x1003' /sys/class/net/w*/flags && wifiicon="📡 "
+	[ -z $wifiicon ] && wifiicon="❌ "
+fi
+
+printf "%s%s%s\n" "$wifiicon" "$ethicon" "^c$vpncol^$vpnicon^d^"
+

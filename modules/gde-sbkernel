@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+icon=" 🐧"
+kernel=$(uname -r | sed 's/-.*//')
+
+printf "%s %s\n" $icon $kernel

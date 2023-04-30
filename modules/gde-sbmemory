@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+case $BUTTON in
+	1) st -e btop ;;
+esac
+
+icon=""
+iconcol="#65b1cd"
+memory=$(free -h | awk '/Mem/ {print $3}')
+
+printf "%s %s\n" "^c$iconcol^$icon^d^" $memory

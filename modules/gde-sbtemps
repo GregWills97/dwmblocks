@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+case $BUTTON in
+	1) st -e btop ;;
+esac
+
+icon="🌡"
+cpu=$(awk '{ print int($1/1000) }' /sys/class/thermal/thermal_zone0/temp)
+gpu=$(sensors | awk '/junction/ {print $2}' | sed 's/\..*//g;s/+//g')
+
+printf "%s %s / %s°C\n" $icon $cpu $gpu

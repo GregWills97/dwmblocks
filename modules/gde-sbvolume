@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+case $BUTTON in
+	1) pavucontrol ;;
+	3) pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
+	4) pactl set-sink-volume @DEFAULT_SINK@ +5% ;;
+	5) pactl set-sink-volume @DEFAULT_SINK@ -5% ;;
+esac
+
+mute=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{ print $2 }')
+vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk 'NR==1{ print $5 }')
+
+fvol=$(printf "%.0f" "${vol%\%}")
+
+case 1 in
+	$((fvol >= 40)) ) icon="🔊" ;;
+	$((fvol >= 1)) ) icon="🔉" ;;
+	*) icon="🔈" ;;
+esac
+
+[ "$mute" == "yes" ] && icon="🔇"
+printf "%s %s\n" $icon $vol
