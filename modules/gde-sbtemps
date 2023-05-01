@@ -5,7 +5,7 @@ case $BUTTON in
 esac
 
 icon="🌡"
-cpu=$(awk '{ print int($1/1000) }' /sys/class/thermal/thermal_zone0/temp)
+cpu=$(sensors | awk '/Tctl/ { print $2 }' | sed 's/+//;s/\..*//')
 gpu=$(sensors | awk '/junction/ {print $2}' | sed 's/\..*//g;s/+//g')
 
 printf "%s %s / %s°C\n" $icon $cpu $gpu
