@@ -3,6 +3,8 @@ CC      := cc
 CFLAGS  := -pedantic -Wall -Wno-deprecated-declarations -Os
 LDFLAGS := -lX11
 
+MODULES := ${wildcard ./modules/*}
+
 # FreeBSD (uncomment)
 #LDFLAGS += -L/usr/local/lib -I/usr/local/include
 # # OpenBSD (uncomment)
@@ -27,11 +29,12 @@ clean:
 
 install: dwmblocks
 	mkdir -p ${DESTDIR}${PREFIX}/bin
-	cp -f dwmblocks ${DESTDIR}${PREFIX}/bin
-	cp -f modules/* ${DESTDIR}${PREFIX}/bin
-	chmod 755 ${DESTDIR}${PREFIX}/bin/dwmblocks
+	install -Dm 755 dwmblocks -t ${DESTDIR}${PREFIX}/bin
+	install -Dm 755 ${MODULES} -t ${DESTDIR}${PREFIX}/bin
 
 uninstall:
-	rm -f ${DESTDIR}${PREFIX}/bin/dwmblocks
+	rm -f ${DESTDIR}${PREFIX}/bin/dwmblocks\
+		${DESTDIR}${PREFIX}/bin/gde-sb*
+
 
 .PHONY: all options clean install uninstall
