@@ -15,5 +15,8 @@ if [ "$wifiicon" = "$ethicon" ] ; then
 	[ -z $wifiicon ] && wifiicon="❌ "
 fi
 
+# If ethernet is connected only show ethernet
+[ ! -z "$ethicon" ] && wifiicon=""
+
 printf "%s%s%s\n" "$wifiicon" "$ethicon" "^c$vpncol^$vpnicon^d^"
 
