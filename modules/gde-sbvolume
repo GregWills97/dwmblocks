@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 case $BUTTON in
-	1) pavucontrol ;;
+	1) pavucontrol & ;;
 	3) pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
 	4) pactl set-sink-volume @DEFAULT_SINK@ +5% ;;
 	5) pactl set-sink-volume @DEFAULT_SINK@ -5% ;;

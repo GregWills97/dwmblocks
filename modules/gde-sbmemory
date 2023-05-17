@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 case $BUTTON in
-	1) st -e btop ;;
+	1) st -e btop & ;;
 esac
 
 icon=""

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 case $BUTTON in
-	1) st -e nmtui; ;;
+	1) st -e nmtui & ;;
 esac
 
 wifiicon=$(sed "s/down//;s/up/📶 /" /sys/class/net/w*/operstate 2>/dev/null)
