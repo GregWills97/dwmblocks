@@ -6,7 +6,7 @@ case $BUTTON in
 	3) pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
 	4) pactl set-sink-volume @DEFAULT_SINK@ +5% ;;
 	5) pactl set-sink-volume @DEFAULT_SINK@ -5% ;;
-	6) $SUDO st -e $EDITOR $0 ;;
+	6) $SUDO st -e $EDITOR $0 & ;;
 esac
 
 mute=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{ print $2 }')

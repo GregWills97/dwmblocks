@@ -3,11 +3,11 @@
 [ command -v sudo >/dev/null 2>&1 ] && SUDO=sudo || SUDO=doas
 case $BUTTON in
 	1) st -e nmtui & ;;
-	6) $SUDO st -e $EDITOR $0 ;;
+	6) $SUDO st -e $EDITOR $0 & ;;
 esac
 
 wifiicon=$(sed "s/down//;s/up/📶 /" /sys/class/net/w*/operstate 2>/dev/null)
-vpnicon=$(sed "s/.*/[VPN] /" /sys/class/net/{tun*,home-vpn}/operstate 2>/dev/null)
+vpnicon=$(sed "s/.*/[VPN] /" /sys/class/net/{tun*,*-wg0}/operstate 2>/dev/null)
 ethicon=$(sed "s/down//;s/up/🌐 /" /sys/class/net/e*/operstate 2>/dev/null)
 vpncol="#f9cb8c"
 
