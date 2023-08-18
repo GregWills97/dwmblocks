@@ -3,7 +3,7 @@
 [ command -v sudo >/dev/null 2>&1 ] && SUDO=sudo || SUDO=doas
 case $BUTTON in
 	1) st -e btop & ;;
-	6) $SUDO st -e $EDITOR $0 & ;;
+	6) st -e $SUDO $EDITOR $0 ;;
 esac
 
 icon=""
