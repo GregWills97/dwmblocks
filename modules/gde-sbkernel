@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+[ command -v sudo >/dev/null 2>&1 ] && SUDO=sudo || SUDO=doas
+case $BUTTON in
+	6) $SUDO st -e $EDITOR $0 ;;
+esac
+
 icon=" 🐧"
 kernel=$(uname -r | sed 's/-.*//')
 
